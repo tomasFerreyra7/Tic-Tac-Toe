@@ -1,16 +1,24 @@
 import { useState } from 'react'
-import './App.css'
 import { Square } from './components/Square.jsx'
 import { TURNS } from './constants/constants.js'
 import { checkWinner, checkEndGame } from './logic/board.js'
 import { WinnerModal } from './components/WinnerModal.jsx'
 import confetti from 'canvas-confetti'
+import { saveGame, resetGameStorage } from './logic/storage/index.js'
 
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null)); // Estado inicial del tablero
+  // Estado del tablero
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = window.localStorage.getItem('board')
+    return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null)
+  })
 
-  const [turn, setTurn] = useState(TURNS.X)
+  // Estado del turno
+  const [turn, setTurn] = useState(() => {
+    const turnFromStorage = window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.X
+  })
 
   // Estado para saber el ganador
   const [winner, setWinner] = useState(null) // null => no hay ganador, false => empate 
@@ -20,6 +28,8 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    resetGameStorage()
   }
 
   const updateBoard = (index) => {
@@ -29,6 +39,9 @@ function App() {
     // Funcion para cambiar el turno
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
+
+    // Guardar la partida
+    saveGame({ board: newBoard, turn: newTurn })
 
     // Funcion para actualizar el tablero
     const newBoard = [...board]
@@ -66,7 +79,7 @@ function App() {
         <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
         <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
       </section>
-      <WinnerModal reset={reset} winner={winner} />
+      <WinnerModal reset={resetGameStorage} winner={winner} />
     </main>
   )
 }
