@@ -40,13 +40,13 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
 
-    // Guardar la partida
-    saveGame({ board: newBoard, turn: newTurn })
-
     // Funcion para actualizar el tablero
     const newBoard = [...board]
     newBoard[index] = turn
     setBoard(newBoard)
+
+    // Guardar la partida
+    saveGame({ board: newBoard, turn: newTurn })
 
     // Funcion para saber si hay ganador
     const newWinner = checkWinner(newBoard)
