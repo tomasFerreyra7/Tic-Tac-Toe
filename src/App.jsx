@@ -73,6 +73,7 @@ function App() {
     const newWinner = checkWinner(newBoard)
 
     if (newWinner) {
+      alert(`The winner is ${newWinner}`)
       setWinner(newWinner)
     }
   }
