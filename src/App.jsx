@@ -29,7 +29,7 @@ function App() {
     setTurn(TURNS.X)
     setWinner(null)
 
-    resetGameStorage()
+    resetGameStorage
   }
 
   const updateBoard = (index) => {
@@ -79,7 +79,7 @@ function App() {
         <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
         <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
       </section>
-      <WinnerModal reset={resetGameStorage} winner={winner} />
+      <WinnerModal winner={winner} reset={resetGameStorage} />
     </main>
   )
 }
